@@ -20,7 +20,7 @@ export default function Login() {
     if (error) {
       alert("Erreur: " + error.message);
     } else {
-      navigate("/panier");
+      navigate("/dashboard");
     }
     setLoading(false);
   };

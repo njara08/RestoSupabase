@@ -1,19 +1,25 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabaseClient";
 import { motion, AnimatePresence } from "framer-motion";
+import { useAuth } from "@/contexts/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 export default function Cart() {
   const [cartItems, setCartItems] = useState([]);
   const [loading, setLoading] = useState(true);
+  const { user } = useAuth();
+  const navigate = useNavigate();
 
   useEffect(() => {
+    if (!user) {
+      navigate("/login");
+      return;
+    }
     fetchCart();
-  }, []);
+  }, [user, navigate]);
 
   const fetchCart = async () => {
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
+    if (!user) return;
     const { data } = await supabase
       .from("cart")
       .select("*, menu(*)")

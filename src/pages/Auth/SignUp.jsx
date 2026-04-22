@@ -41,7 +41,7 @@ export default function SignUp() {
         alert("Erreur profil: " + profileError.message);
       } else {
         alert("Compte créé avec succès !");
-        navigate("/login");
+        navigate("/dashboard");
       }
     }
     setLoading(false);
