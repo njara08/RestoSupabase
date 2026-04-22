@@ -1,10 +1,12 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
+import { useAuth } from "@/contexts/AuthContext";
 
 export default function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
-  const [isOpen, setIsOpen] = useState(false); // État pour le menu mobile
+  const [isOpen, setIsOpen] = useState(false);
+  const { user, signOut } = useAuth();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -19,6 +21,10 @@ export default function Header() {
     { name: "Menu", path: "/menu" },
     { name: "À Propos", path: "/apropos" },
   ];
+
+  const handleLogout = async () => {
+    await signOut();
+  };
 
   return (
     <header
@@ -57,12 +63,35 @@ export default function Header() {
         {/* ACTIONS & BURGER */}
         <div className="flex items-center gap-4">
           <div className="hidden md:flex items-center gap-6">
-            <Link
-              to="/login"
-              className="text-sm text-gray-400 hover:text-white transition"
-            >
-              Connexion
-            </Link>
+            {user ? (
+              <>
+                <Link
+                  to="/dashboard"
+                  className="text-sm text-gray-400 hover:text-white transition"
+                >
+                  Dashboard
+                </Link>
+                <Link
+                  to="/panier"
+                  className="text-sm text-gray-400 hover:text-white transition"
+                >
+                  Panier
+                </Link>
+                <button
+                  onClick={handleLogout}
+                  className="text-sm text-gray-400 hover:text-white transition"
+                >
+                  Déconnexion
+                </button>
+              </>
+            ) : (
+              <Link
+                to="/login"
+                className="text-sm text-gray-400 hover:text-white transition"
+              >
+                Connexion
+              </Link>
+            )}
             <Link to="/reservation">
               <motion.button
                 whileHover={{ scale: 1.05 }}
@@ -125,13 +154,41 @@ export default function Header() {
                   </Link>
                 ))}
                 <div className="h-px bg-accent/20 my-4" />
-                <Link
-                  to="/login"
-                  onClick={() => setIsOpen(false)}
-                  className="text-xl text-gray-400"
-                >
-                  Connexion
-                </Link>
+                {user ? (
+                  <>
+                    <Link
+                      to="/dashboard"
+                      onClick={() => setIsOpen(false)}
+                      className="text-xl text-gray-400"
+                    >
+                      Dashboard
+                    </Link>
+                    <Link
+                      to="/panier"
+                      onClick={() => setIsOpen(false)}
+                      className="text-xl text-gray-400"
+                    >
+                      Panier
+                    </Link>
+                    <button
+                      onClick={() => {
+                        handleLogout();
+                        setIsOpen(false);
+                      }}
+                      className="text-xl text-gray-400 text-left"
+                    >
+                      Déconnexion
+                    </button>
+                  </>
+                ) : (
+                  <Link
+                    to="/login"
+                    onClick={() => setIsOpen(false)}
+                    className="text-xl text-gray-400"
+                  >
+                    Connexion
+                  </Link>
+                )}
                 <button className="mt-4 px-6 py-4 rounded-xl font-bold text-white bg-[linear-gradient(45deg,#7505A5,#410160)] shadow-lg shadow-primary/20">
                   RÉSERVER UNE TABLE
                 </button>
