@@ -1,0 +1,19 @@
+@import "tailwindcss";
+
+@theme {
+  /* Vos couleurs personnalisées */
+  --color-primary: #7505A5;   /* Violet vif (boutons, titres) */
+  --color-dark-bg: #190027;   /* Fond très sombre */
+  --color-accent: #410160;    /* Violet moyen (cartes, hover) */
+  --color-deep: #1E012F;      /* Variante pour sections */
+
+  /* Vous pouvez aussi définir des polices si vous voulez */
+  --font-serif: "Playfair Display", serif;
+}
+
+/* Styles globaux pour le restaurant */
+@layer base {
+  body {
+    @apply bg-dark-bg text-white antialiased;
+  }
+}
